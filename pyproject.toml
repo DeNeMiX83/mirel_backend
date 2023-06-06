@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "mirel-backend"
+version = "0.1.0"
+description = ""
+authors = ["mihey <daniil53891@yandex.com>"]
+readme = "README.md"
+packages = [{include = "mirel_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sqlalchemy = "^2.0.15"
+yadisk = "^1.3.3"
+gunicorn = "^20.1.0"
+alembic = "^1.11.1"
+asyncpg = "^0.27.0"
+fastapi = "^0.96.0"
+uvicorn = "^0.22.0"
+python-multipart = "^0.0.6"
+pillow = "^9.5.0"
+
+[tool.poetry.group.linter.dependencies]
+mypy = "^1.2.0"
+flake8 = "^6.0.0"
+flake8-print = "^5.0.0"
+flake8-pyproject = "^1.2.3"
+black = "^23.3.0"
+
+[tool.black]
+line-length = 79
+
+[tool.flake8]
+exclude = ['.git','__pycache__', '.env', 'venv', 'alembic',]
+max-line-length = 79
+max-complexivity = 8
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

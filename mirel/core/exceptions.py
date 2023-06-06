@@ -1,0 +1,6 @@
+class GatewayException(Exception):
+    ...
+
+
+class UnsupportedImageFormat(Exception):
+    ...
