@@ -1,5 +1,7 @@
-from typing import Any
+from typing import Any, List, Generic, TypeVar
+from pydantic import BaseModel
 from pydantic.fields import Undefined
+from math import ceil
 from mirel.core.dto import (
     ProductCreate as ProductCreate_,
     ProductGetByFilters as ProductGetByFilters_,
@@ -53,3 +55,29 @@ class ArticleCreate(ArticleCreate_):
                 "description": "Полное описания статьи",
             }
         }
+
+
+ItemsType = TypeVar("ItemsType")
+
+
+class PaginationResponse(BaseModel, Generic[ItemsType]):
+    items: List[ItemsType]
+    page: int
+    pages: int
+    size: int
+    total: int
+
+    @staticmethod
+    def get_by_items(items: List[ItemsType], page: int, size: int):
+        offset_start = page * size
+        offset_end = (page + 1) * size
+        count_items = len(items)
+        pages = ceil(count_items / size)
+
+        return PaginationResponse(
+            items=items[offset_start:offset_end],
+            page=page,
+            pages=pages,
+            size=size,
+            total=count_items,
+        )

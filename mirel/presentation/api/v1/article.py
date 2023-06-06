@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Tuple, List, Optional
 from pydantic import ValidationError
 from fastapi import (
     APIRouter,
@@ -31,8 +31,9 @@ from mirel.presentation.api.di.stubs import (
     provide_article_get_handler_stub,
     provide_article_get_all_handler_stub,
 )
+from .field_templates import get_pagination_fields
 from .work_with_files import save_file
-from .dto import ArticleCreate
+from .dto import PaginationResponse, ArticleCreate
 
 router = APIRouter()
 
@@ -93,16 +94,24 @@ async def create_article(
 @router.get(
     path="/",
     status_code=status.HTTP_200_OK,
-    response_model=List[Article],
+    response_model=PaginationResponse[Article],
 )
 async def get_all_article(
     response: Response,
+    pagination_fields: Tuple[int, int] = Depends(get_pagination_fields),
     handler: ArticleGetAllHandler = Depends(
         provide_article_get_all_handler_stub
     ),
 ):
     articles = await handler.execute(ArticleGetAllForHandler())
-    return articles
+
+    page, size = pagination_fields
+    response_data = PaginationResponse.get_by_items(
+        items=articles,
+        page=page,
+        size=size,
+    )
+    return response_data
 
 
 @router.get(

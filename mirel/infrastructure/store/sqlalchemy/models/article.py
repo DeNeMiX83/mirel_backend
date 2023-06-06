@@ -10,7 +10,7 @@ class Article(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(30), nullable=False)
     preview_description = Column(String(50), nullable=False)
-    description = Column(Text, nullable=False, unique=True)
+    description = Column(Text, nullable=False)
     link_to_preview_image = Column(String(100), nullable=False, unique=True)
     link_to_image = Column(String(100), nullable=False, unique=True)
 

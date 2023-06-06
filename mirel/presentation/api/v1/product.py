@@ -1,9 +1,11 @@
-from typing import List, Optional
+from typing import List, Tuple, Optional
 from pydantic import ValidationError
+from math import ceil
 from fastapi import (
     APIRouter,
     Depends,
     Response,
+    Query,
     status,
     File,
     UploadFile,
@@ -34,8 +36,9 @@ from mirel.presentation.api.di.stubs import (
     provide_product_get_all_handler_stub,
     provide_product_get_by_filters_handler_stub,
 )
+from .field_templates import get_pagination_fields
 from .work_with_files import save_file
-from .dto import ProductCreate, ProductGetByFilters
+from .dto import PaginationResponse, ProductCreate, ProductGetByFilters
 
 router = APIRouter()
 
@@ -100,16 +103,26 @@ async def create_product(
 @router.get(
     path="/",
     status_code=status.HTTP_200_OK,
-    response_model=List[ProductReturn],
+    response_model=PaginationResponse[ProductReturn],
 )
 async def get_all_product(
     response: Response,
+    pagination_fields: Tuple[int, int] = Depends(get_pagination_fields),
     handler: ProductGetAllHandler = Depends(
         provide_product_get_all_handler_stub
     ),
 ):
-    products = await handler.execute(ProductGetAllForHandler())
-    return products
+    products = await handler.execute(
+        ProductGetAllForHandler()
+    )
+
+    page, size = pagination_fields
+    response_data = PaginationResponse.get_by_items(
+        items=products,
+        page=page,
+        size=size,
+    )
+    return response_data
 
 
 @router.get(
@@ -129,15 +142,17 @@ async def get_product(
 @router.post(
     path="/filter",
     status_code=status.HTTP_200_OK,
-    response_model=List[ProductReturn],
+    response_model=PaginationResponse[ProductReturn],
 )
 async def get_product_by_filters(
     response: Response,
     filters: ProductGetByFilters,
+    pagination_fields: Tuple[int, int] = Depends(get_pagination_fields),
     handler: ProductGetByFiltersHandler = Depends(
         provide_product_get_by_filters_handler_stub
     ),
 ):
+    page, size = pagination_fields
     products = await handler.execute(
         ProductGetByFiltersForHandler(
             company=filters.company,
@@ -146,4 +161,10 @@ async def get_product_by_filters(
             year_implementation=filters.year_implementation,
         )
     )
-    return products
+
+    response_data = PaginationResponse.get_by_items(
+        items=products,
+        page=page,
+        size=size,
+    )
+    return response_data
