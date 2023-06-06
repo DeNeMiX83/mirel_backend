@@ -30,7 +30,7 @@ services:
     build:
       context: ../
       dockerfile: deploy/Dockerfile
-    command: ["make", "run-backend-uvi"]
+    command: ["make", "run-backend"]
     ports:
       - ${BACKEND_HOST_PORT}:${BACKEND_PORT}
     env_file:

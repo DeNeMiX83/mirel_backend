@@ -21,7 +21,7 @@ def create_app() -> FastAPI:
     sqlalchemy_mapping()
 
     app.include_router(router)
-    set_custom_openapi(app)
+    set_custom_openapi(app, settings)
 
     return app
 
