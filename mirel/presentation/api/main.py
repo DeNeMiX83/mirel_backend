@@ -14,7 +14,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         root_path=settings.root_path,
         root_path_in_servers=True,
-        docs_url=settings.api_url + settings.docs_url,
+        docs_url=settings.docs_url,
         port=settings.port,
     )
     setup_di(app, settings)
