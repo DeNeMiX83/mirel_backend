@@ -1,6 +1,7 @@
 DOCKER_COMPOSE := deploy/docker-compose.yml
 DOCKER_ENV := deploy/.env
 DOCKER_COMPOSE_RUNNER := docker compose
+PROJECT_NAME := mirel
 ifneq ($(ENV),)
 	DOCKER_COMPOSE := deploy/dev.docker-compose.yml
 	DOCKER_ENV := deploy/.env.dev
