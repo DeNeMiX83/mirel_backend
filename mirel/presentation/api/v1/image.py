@@ -1,17 +1,13 @@
 from os import remove
 from io import BytesIO
-from typing import Annotated, Dict
-from pydantic import ValidationError
 from yadisk.exceptions import PathNotFoundError
 from fastapi import (
     APIRouter,
     Depends,
-    Response,
     status,
 )
 from fastapi.exceptions import HTTPException
-from fastapi.responses import StreamingResponse, FileResponse
-from mirel.config.settings import Settings
+from fastapi.responses import StreamingResponse
 from mirel.core.dto import (
     ImageGet as ImageGetForHandler,
 )

@@ -1,11 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String, Integer, Text
 from sqlalchemy.orm import registry, relationship
 from .base import Base
-from mirel.core.entities import (
-    Product as ProductEntity,
-    TypeSolution,
-    TypeObject,
-)
+from mirel.core.entities import Product as ProductEntity
 
 
 class Product(Base):
@@ -18,7 +14,8 @@ class Product(Base):
         Integer, ForeignKey("type_solution.id"), nullable=False
     )
     type_solution = relationship(
-        "mirel.infrastructure.store.sqlalchemy.models.type_solution.TypeSolution"
+        "mirel.infrastructure.store.sqlalchemy.models.type_solution"
+        + ".TypeSolution"
     )
     type_object_id = Column(
         Integer, ForeignKey("type_object.id"), nullable=False

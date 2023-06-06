@@ -84,7 +84,8 @@ async def create_article(
         response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
         return HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Неподдерживаемый формат файла. Допустимые форматы: png, jpg, jpeg",
+            detail="Неподдерживаемый формат файла. "
+            + "Допустимые форматы: png, jpg, jpeg",
         )
     return article_return
 

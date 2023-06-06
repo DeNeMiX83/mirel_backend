@@ -1,14 +1,9 @@
-from typing import List, Any
-from pydantic import BaseModel
+from typing import Any
 from pydantic.fields import Undefined
 from mirel.core.dto import (
     ProductCreate as ProductCreate_,
     ProductGetByFilters as ProductGetByFilters_,
     ArticleCreate as ArticleCreate_,
-)
-from mirel.core.entities import (
-    TypeSolution as TypeSolution_,
-    TypeObject as TypeObject_,
 )
 
 

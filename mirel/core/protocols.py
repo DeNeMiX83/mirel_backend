@@ -1,6 +1,6 @@
 from typing import Protocol, Optional, List
 from .dto import ProductGetByFilters, ProductReturn
-from .entities import Product, ProductId, Article, ArticleId
+from .entities import Product, ProductId, Article, ArticleId, TypeSolution, TypeObject
 
 
 class ProductGateway(Protocol):
@@ -33,6 +33,16 @@ class ArticleGateway(Protocol):
         raise NotImplementedError
 
     async def create(self, data: Article):
+        raise NotImplementedError
+
+
+class TypeSolutionGateway(Protocol):
+    async def get_all(self) -> List[TypeSolution]:
+        raise NotImplementedError
+
+
+class TypeObjectGateway(Protocol):
+    async def get_all(self) -> List[TypeObject]:
         raise NotImplementedError
 
 

@@ -1,6 +1,5 @@
 from typing import Callable, Type
 from fastapi import Depends
-from mirel.config.settings import Settings
 from sqlalchemy.ext.asyncio import AsyncSession
 from mirel.infrastructure.store.cloud import Service
 from mirel.infrastructure.store.sqlalchemy import (
@@ -14,6 +13,8 @@ from mirel.core.handlers import (
     ProductGetAllHandler,
     ProductGetHandler,
     ProductGetByFiltersHandler,
+    TypeSolutionGetAllHandler,
+    TypeObjectGetAllHandler,
     ArticleCreateHandler,
     ArticleGetAllHandler,
     ArticleGetHandler,
@@ -47,6 +48,9 @@ def get_cloud_gateway(
         return gateway_type(cloud)
 
     return _get_gateway
+
+
+# Product
 
 
 def provide_product_create_handler(
@@ -99,6 +103,29 @@ def provide_product_get_by_filters_handler(
     return ProductGetByFiltersHandler(
         product_gateway=product_gateway,
     )
+
+
+def provide_type_solution_get_all_handler(
+    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
+    ),
+) -> TypeSolutionGetAllHandler:
+    return TypeSolutionGetAllHandler(
+        type_solution_gateway=type_solution_gateway,
+    )
+
+
+def provide_type_object_get_all_handler(
+    type_object_gateway: sqlalchemy_gateway.TypeObjectGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeObjectGatewayImpl)
+    ),
+) -> TypeObjectGetAllHandler:
+    return TypeObjectGetAllHandler(
+        type_object_gateway=type_object_gateway,
+    )
+
+
+# Article
 
 
 def provide_article_create_handler(

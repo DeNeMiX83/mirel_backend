@@ -1,4 +1,4 @@
-from typing import NewType, Optional, Union
+from typing import NewType, Optional
 from dataclasses import dataclass
 
 ProductId = NewType("ProductId", int)

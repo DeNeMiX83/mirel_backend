@@ -1,8 +1,6 @@
 from mirel.core.dto import ProductCreate, ArticleCreate
 from mirel.core.entities import (
     Product as Product,
-    TypeSolution,
-    TypeObject,
     Article,
 )
 

@@ -13,6 +13,8 @@ from mirel.presentation.api.di.stubs import (
     provide_product_get_all_handler_stub,
     provide_product_get_handler_stub,
     provide_product_get_by_filters_handler_stub,
+    provide_type_solution_get_all_handler_stub,
+    provide_type_object_get_all_handler_stub,
     provide_article_create_handler_stub,
     provide_article_get_all_handler_stub,
     provide_article_get_handler_stub,
@@ -24,6 +26,8 @@ from mirel.presentation.api.di.provides import (
     provide_product_get_all_handler,
     provide_product_get_handler,
     provide_product_get_by_filters_handler,
+    provide_type_solution_get_all_handler,
+    provide_type_object_get_all_handler,
     provide_article_create_handler,
     provide_article_get_all_handler,
     provide_article_get_handler,
@@ -48,10 +52,12 @@ def setup_di(app: FastAPI, settings: Settings):
         provide_product_create_handler_stub: provide_product_create_handler,
         provide_product_get_all_handler_stub: provide_product_get_all_handler,
         provide_product_get_handler_stub: provide_product_get_handler,
-        provide_product_get_by_filters_handler_stub: provide_product_get_by_filters_handler,
+        provide_product_get_by_filters_handler_stub: provide_product_get_by_filters_handler,  # noqa
         provide_article_create_handler_stub: provide_article_create_handler,
         provide_article_get_all_handler_stub: provide_article_get_all_handler,
         provide_article_get_handler_stub: provide_article_get_handler,
         provide_image_get_handler_stub: provide_image_get_handler,
+        provide_type_solution_get_all_handler_stub: provide_type_solution_get_all_handler,  # noqa
+        provide_type_object_get_all_handler_stub: provide_type_object_get_all_handler,  # noqa
     }
     app.dependency_overrides.update(handlers)

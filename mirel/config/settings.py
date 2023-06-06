@@ -47,7 +47,6 @@ class Settings:
     port: int = field(init=False)
     root_path: str = field(init=False)
 
-    api_url: str = field(init=False)
     docs_url: str = field(init=False)
 
     path_to_folder_for_save_image: str = field(init=False)

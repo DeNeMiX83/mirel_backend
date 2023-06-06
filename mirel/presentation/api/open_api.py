@@ -16,11 +16,7 @@ def set_custom_openapi(app: FastAPI, settings: Settings):
     openapi_schema["info"]["x-logo"] = {
         "url": "https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
     }
-    openapi_schema["servers"] = [
-        {
-            "url": settings.root_path
-        }
-    ],
+    openapi_schema["servers"] = [{"url": settings.root_path}]
     openapi_schema["components"]["schemas"][
         "ProductCreate"
     ] = ProductCreate.schema()

@@ -1,6 +1,6 @@
 from typing import List, Sequence, Union, Tuple
-from sqlalchemy import select, join, Row
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy import select, Row
+from sqlalchemy.orm import joinedload
 from .base import Gateway
 from mirel.infrastructure.store.sqlalchemy.models import (
     Product as ProductModel,
@@ -12,7 +12,7 @@ from mirel.core.dto import (
     TypeObjectReturn,
     ProductGetByFilters,
 )
-from mirel.core.entities import Product, ProductId, TypeSolution, TypeObject
+from mirel.core.entities import Product, ProductId
 
 
 class ProductGatewayImpl(Gateway, ProductGateway):

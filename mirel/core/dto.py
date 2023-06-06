@@ -48,7 +48,7 @@ class ProductGet(BaseModel):
 
 
 class ProductGetAll(BaseModel):
-    pass
+    ...
 
 
 class ProductGetByFilters(BaseModel):
@@ -71,7 +71,15 @@ class ArticleGet(BaseModel):
 
 
 class ArticleGetAll(BaseModel):
-    pass
+    ...
+
+
+class TypeSolutionGetAll(BaseModel):
+    ...
+
+
+class TypeObjectGetAll(BaseModel):
+    ...
 
 
 class ImageGet(BaseModel):

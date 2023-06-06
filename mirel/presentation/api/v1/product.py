@@ -91,7 +91,8 @@ async def create_product(
         response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
         return HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Неподдерживаемый формат файла. Допустимые форматы: png, jpg, jpeg",
+            detail="Неподдерживаемый формат файла."
+            + " Допустимые форматы: png, jpg, jpeg",
         )
     return product_return
 

@@ -5,12 +5,13 @@ PROJECT_NAME := mirel
 ROOT_PATH := /mirel/api/v1
 ifneq ($(ENV),)
 	DOCKER_COMPOSE := deploy/dev.docker-compose.yml
-	DOCKER_ENV := deploy/.env.dev
 	DOCKER_COMPOSE_RUNNER := docker compose
 	ifeq ($(ENV),docker)
+		DOCKER_ENV := deploy/.env.dev
 		include deploy/.env.dev
 		export $(shell sed 's/=.*//' deploy/.env.dev)
 	else ifeq ($(ENV),local)
+		DOCKER_ENV := deploy/.env.dev.local
 		include deploy/.env.dev.local
 		export $(shell sed 's/=.*//' deploy/.env.dev.local)
 	endif

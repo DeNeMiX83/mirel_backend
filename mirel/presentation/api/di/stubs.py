@@ -14,6 +14,9 @@ def provide_settings_stub():
     ...
 
 
+# Product
+
+
 def provide_product_create_handler_stub():
     ...
 
@@ -28,6 +31,17 @@ def provide_product_get_handler_stub():
 
 def provide_product_get_by_filters_handler_stub():
     ...
+
+
+def provide_type_solution_get_all_handler_stub():
+    ...
+
+
+def provide_type_object_get_all_handler_stub():
+    ...
+
+
+# Article
 
 
 def provide_article_create_handler_stub():
