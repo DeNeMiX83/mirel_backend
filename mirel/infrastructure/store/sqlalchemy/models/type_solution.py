@@ -8,7 +8,7 @@ class TypeSolution(Base):
     __tablename__ = "type_solution"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False, unique=True)
 
 
 def type_solution_mapping(mapper_registry: registry):

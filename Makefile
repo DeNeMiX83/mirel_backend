@@ -61,6 +61,16 @@ compose-logs:
 	$(DOCKER_COMPOSE_RUNNER) -f $(DOCKER_COMPOSE) --env-file $(DOCKER_ENV) \
 	-p $(PROJECT_NAME) logs -f
 
-.PHONY: get_yandex_disk_token-logs
+.PHONY: get_yandex_disk_token
 get_yandex_disk_token:
 	poetry run python -m mirel.presentation.cli.get_yandex_token
+
+
+.PHONY: set_type_objects
+set_type_objects:
+	poetry run python -m mirel.presentation.cli.add_type_objects
+
+
+.PHONY: set_type_solution
+set_type_solution:
+	poetry run python -m mirel.presentation.cli.add_type_solution

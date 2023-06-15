@@ -37,11 +37,17 @@ class ArticleGateway(Protocol):
 
 
 class TypeSolutionGateway(Protocol):
+    async def create(self, data: TypeSolution):
+        raise NotImplementedError
+
     async def get_all(self) -> List[TypeSolution]:
         raise NotImplementedError
 
 
 class TypeObjectGateway(Protocol):
+    async def create(self, data: TypeObject):
+        raise NotImplementedError
+
     async def get_all(self) -> List[TypeObject]:
         raise NotImplementedError
 

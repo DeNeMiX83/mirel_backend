@@ -2,6 +2,8 @@ from mirel.core.dto import ProductCreate, ArticleCreate
 from mirel.core.entities import (
     Product as Product,
     Article,
+    TypeObject,
+    TypeSolution,
 )
 
 
@@ -40,4 +42,26 @@ class ArticleService:
             description=data.description,
             link_to_preview_image=link_to_preview_image,
             link_to_image=link_to_image,
+        )
+
+
+class TypeObjectService:
+    def create(
+        self,
+        name: str,
+    ) -> TypeObject:
+        return TypeObject(
+            id=None,
+            name=name,
+        )
+
+
+class TypeSolutionService:
+    def create(
+        self,
+        name: str,
+    ) -> TypeSolution:
+        return TypeSolution(
+            id=None,
+            name=name,
         )

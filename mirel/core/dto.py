@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 from mirel.core.entities import (
     ProductId,
@@ -74,8 +74,16 @@ class ArticleGetAll(BaseModel):
     ...
 
 
+class TypeSolutionCreate(BaseModel):
+    names: List[str]
+
+
 class TypeSolutionGetAll(BaseModel):
     ...
+
+
+class TypeObjectCreate(BaseModel):
+    names: List[str]
 
 
 class TypeObjectGetAll(BaseModel):

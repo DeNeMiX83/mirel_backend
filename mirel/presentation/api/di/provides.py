@@ -13,8 +13,13 @@ from mirel.core.handlers import (
     ProductGetAllHandler,
     ProductGetHandler,
     ProductGetByFiltersHandler,
+
+    TypeSolutionCreateHandler,
     TypeSolutionGetAllHandler,
+
+    TypeObjectCreateHandler,
     TypeObjectGetAllHandler,
+
     ArticleCreateHandler,
     ArticleGetAllHandler,
     ArticleGetHandler,
@@ -105,6 +110,20 @@ def provide_product_get_by_filters_handler(
     )
 
 
+def provide_type_solution_create_handler(
+    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
+    ),
+    commiter: sqlalchemy_gateway.CommiterImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.CommiterImpl)
+    ),
+) -> TypeObjectCreateHandler:
+    return TypeObjectCreateHandler(
+        type_solution_gateway=type_solution_gateway,
+        commiter=commiter,
+    )
+
+
 def provide_type_solution_get_all_handler(
     type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(
         get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
@@ -112,6 +131,20 @@ def provide_type_solution_get_all_handler(
 ) -> TypeSolutionGetAllHandler:
     return TypeSolutionGetAllHandler(
         type_solution_gateway=type_solution_gateway,
+    )
+
+
+def provide_type_object_create_handler(
+    type_object_gateway: sqlalchemy_gateway.TypeObjectGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeObjectGatewayImpl)
+    ),
+    commiter: sqlalchemy_gateway.CommiterImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.CommiterImpl)
+    ),
+) -> TypeObjectCreateHandler:
+    return TypeObjectCreateHandler(
+        type_object_gateway=type_object_gateway,
+        commiter=commiter,
     )
 
 

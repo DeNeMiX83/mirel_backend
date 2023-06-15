@@ -3,13 +3,17 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class PostgresSettings:
+class DataBaseSettings:
+    url: str = field(init=False)
+
+
+@dataclass
+class PostgresSettings(DataBaseSettings):
     host: str = field(init=False)
     port: int = field(init=False)
     user: str = field(init=False)
     password: str = field(init=False)
     database: str = field(init=False)
-    url: str = field(init=False)
 
     def __post_init__(self):
         self.host = os.getenv("POSTGRES_HOST")
@@ -53,9 +57,10 @@ class Settings:
 
     link_to_image: str = field(init=False)
 
-    postgres: PostgresSettings = field(
-        init=False, default_factory=PostgresSettings  # noqa E501
+    database: DataBaseSettings = field(
+        init=False, default_factory=PostgresSettings
     )
+
     yandex_disk: YandexDiskSettings = field(
         init=False, default_factory=YandexDiskSettings
     )

@@ -33,7 +33,15 @@ def provide_product_get_by_filters_handler_stub():
     ...
 
 
+def provide_type_solution_create_handler_stub():
+    ...
+
+
 def provide_type_solution_get_all_handler_stub():
+    ...
+
+
+def provide_type_object_create_handler_stub():
     ...
 
 

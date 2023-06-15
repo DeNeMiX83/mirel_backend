@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Depends
 from .open_api import set_custom_openapi
 from mirel.presentation.api.di.di import setup_di
 from mirel.presentation.api.routes import router
@@ -6,6 +7,7 @@ from mirel.infrastructure.store.sqlalchemy.models import (
     mapping as sqlalchemy_mapping,
 )
 from mirel.config.settings import Settings
+from mirel.config.initialization import initial_initialization
 
 
 def create_app() -> FastAPI:

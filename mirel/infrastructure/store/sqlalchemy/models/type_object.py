@@ -8,7 +8,7 @@ class TypeObject(Base):
     __tablename__ = "type_object"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False, unique=True)
 
 
 def type_object_mapping(mapper_registry: registry):
