@@ -92,3 +92,11 @@ class TypeObjectGetAll(BaseModel):
 
 class ImageGet(BaseModel):
     filename: str
+
+
+class ForwardingFeedbackData(BaseModel):
+    name: str
+    email: str
+    telephone: str
+    msg: str
+    email_recipient: Optional[str] = None

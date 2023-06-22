@@ -5,6 +5,7 @@ from mirel.presentation.api.v1 import (
     type_object,
     article,
     image,
+    email,
 )
 from mirel.config.settings import Settings
 
@@ -20,3 +21,4 @@ router.include_router(
     type_object.router, prefix="/type_objects", tags=["type_objects"]
 )
 router.include_router(image.router, prefix="/images", tags=["images"])
+router.include_router(email.router, prefix="/email", tags=["email"])

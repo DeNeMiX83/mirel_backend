@@ -1,17 +1,19 @@
-from typing import Any, List, Generic, TypeVar
+from typing import List, Generic, TypeVar
 from pydantic import BaseModel
-from pydantic.fields import Undefined
 from math import ceil
 from mirel.core.dto import (
-    ProductCreate as ProductCreate_,
     ProductGetByFilters as ProductGetByFilters_,
-    ArticleCreate as ArticleCreate_,
 )
 
 
-class ProductCreate(ProductCreate_):
-    path_to_preview_image: Any = Undefined
-    path_to_image: Any = Undefined
+class ProductCreate(BaseModel):
+    title: str
+    company: str
+    type_solution_id: int
+    type_object_id: int
+    year_implementation: int
+    preview_description: str
+    description: str
 
     class Config:
         schema_extra = {
@@ -43,9 +45,10 @@ class ProductGetByFilters(ProductGetByFilters_):
         # exclude = {"created_date"}
 
 
-class ArticleCreate(ArticleCreate_):
-    path_to_preview_image: Any = Undefined
-    path_to_image: Any = Undefined
+class ArticleCreate(BaseModel):
+    title: str
+    preview_description: str
+    description: str
 
     class Config:
         schema_extra = {
@@ -81,3 +84,20 @@ class PaginationResponse(BaseModel, Generic[ItemsType]):
             size=size,
             total=count_items,
         )
+
+
+class ForwardingFeedbackData(BaseModel):
+    name: str
+    email: str
+    telephone: str
+    msg: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "Иванов Иван Иванович",
+                "email": "email@gmail.com",
+                "telephone": "+79001231212",
+                "msg": "Тестовая обратная связь",
+            }
+        }
