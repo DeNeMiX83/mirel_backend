@@ -1,11 +1,9 @@
-from typing import List, Tuple, Optional
+from typing import Tuple, Optional
 from pydantic import ValidationError
-from math import ceil
 from fastapi import (
     APIRouter,
     Depends,
     Response,
-    Query,
     status,
     File,
     UploadFile,
@@ -112,9 +110,7 @@ async def get_all_product(
         provide_product_get_all_handler_stub
     ),
 ):
-    products = await handler.execute(
-        ProductGetAllForHandler()
-    )
+    products = await handler.execute(ProductGetAllForHandler())
 
     page, size = pagination_fields
     response_data = PaginationResponse.get_by_items(

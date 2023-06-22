@@ -11,7 +11,8 @@ class ImageEditorImpl(ImageEditor):
     async def optimize(self, path_to_image: str) -> str:
         image = Image.open(path_to_image)
         filename = basename(path_to_image)
-        filename = filename.split(".")[0]
+        print(filename)
+        filename, old_ext = filename.split(".")
 
         if image.info:
             image_without_metadata = Image.new(image.mode, image.size)
@@ -22,6 +23,9 @@ class ImageEditorImpl(ImageEditor):
         path_to_new_image = join(self._folder, f"{filename}.jpg")
 
         jpeg_image.save(path_to_new_image)
-        remove(path_to_image)
+        if old_ext != "jpg":
+            print(path_to_new_image)
+            print(old_ext)
+            remove(path_to_image)
 
         return path_to_new_image

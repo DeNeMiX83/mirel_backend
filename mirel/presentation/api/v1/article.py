@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+from typing import Tuple, Optional
 from pydantic import ValidationError
 from fastapi import (
     APIRouter,

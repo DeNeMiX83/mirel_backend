@@ -10,6 +10,10 @@ def provide_image_editor_stub():
     ...
 
 
+def provide_email_sender_stub():
+    ...
+
+
 def provide_settings_stub():
     ...
 
@@ -65,4 +69,8 @@ def provide_article_get_handler_stub():
 
 
 def provide_image_get_handler_stub():
+    ...
+
+
+def provide_forwarding_feedback_handler_stub():
     ...

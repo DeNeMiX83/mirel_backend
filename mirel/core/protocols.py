@@ -1,6 +1,13 @@
 from typing import Protocol, Optional, List
-from .dto import ProductGetByFilters, ProductReturn
-from .entities import Product, ProductId, Article, ArticleId, TypeSolution, TypeObject
+from .dto import ProductGetByFilters, ProductReturn, ForwardingFeedbackData
+from .entities import (
+    Product,
+    ProductId,
+    Article,
+    ArticleId,
+    TypeSolution,
+    TypeObject,
+)
 
 
 class ProductGateway(Protocol):
@@ -83,4 +90,9 @@ class ImageEditor(Protocol):
 
 class ImageCloudGateway(Protocol):
     async def get_image(self, path_to_image: str) -> str:
+        raise NotImplementedError
+
+
+class EmailSender(Protocol):
+    async def forwarding_feedback(self, data: ForwardingFeedbackData) -> None:
         raise NotImplementedError

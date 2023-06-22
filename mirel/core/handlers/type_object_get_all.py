@@ -7,9 +7,7 @@ from mirel.core.dto import TypeObjectGetAll
 from mirel.core.entities import TypeObject
 
 
-class TypeObjectGetAllHandler(
-    Hаndler[TypeObjectGetAll, List[TypeObject]]
-):
+class TypeObjectGetAllHandler(Hаndler[TypeObjectGetAll, List[TypeObject]]):
     def __init__(self, type_object_gateway: TypeObjectGateway):
         self._type_object_gateway = type_object_gateway
 

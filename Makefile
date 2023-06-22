@@ -24,9 +24,17 @@ run-backend:
 	--worker-class uvicorn.workers.UvicornWorker \
 	--log-level $(LOG_LEVEL)
 
-.PHONY: run-backend_uvi
+.PHONY: run-backend-uvi
 run-backend-uvi:
 	poetry run uvicorn mirel.presentation.api.main:app --reload --host $(HOST) --port $(BACKEND_PORT) --root-path $(ROOT_PATH)
+
+.PHONY: set-type-objects
+set-type-objects:
+	poetry run python -m mirel.presentation.cli.add_type_objects
+
+.PHONY: set-type-solution
+set-type-solution:
+	poetry run python -m mirel.presentation.cli.add_type_solution
 
 .PHONY: migrate-create
 migrate-create:
@@ -61,16 +69,14 @@ compose-logs:
 	$(DOCKER_COMPOSE_RUNNER) -f $(DOCKER_COMPOSE) --env-file $(DOCKER_ENV) \
 	-p $(PROJECT_NAME) logs -f
 
-.PHONY: get_yandex_disk_token
-get_yandex_disk_token:
+.PHONY: compose-set-type-objects
+compose-set-type-objects:
+	docker exec -it mirel_backend set-type-objects
+
+.PHONY: compose-set_type_solution
+compose-set-type-solution:
+	docker exec -it mirel_backend set-type-solution
+
+.PHONY: get-yandex-disk-token
+get-yandex-disk-token:
 	poetry run python -m mirel.presentation.cli.get_yandex_token
-
-
-.PHONY: set_type_objects
-set_type_objects:
-	poetry run python -m mirel.presentation.cli.add_type_objects
-
-
-.PHONY: set_type_solution
-set_type_solution:
-	poetry run python -m mirel.presentation.cli.add_type_solution

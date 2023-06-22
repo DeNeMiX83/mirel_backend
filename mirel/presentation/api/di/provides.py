@@ -7,29 +7,34 @@ from mirel.infrastructure.store.sqlalchemy import (
 )
 from mirel.infrastructure.store.cloud import gateways as cloud_gateway
 from mirel.infrastructure.images import ImageEditorImpl
-from mirel.core.services import ProductService, ArticleService
+from mirel.infrastructure.email import EmailSenderImpl
+from mirel.core.services import (
+    ProductService,
+    ArticleService,
+    TypeSolutionService,
+    TypeObjectService,
+)
 from mirel.core.handlers import (
     ProductCreateHandler,
     ProductGetAllHandler,
     ProductGetHandler,
     ProductGetByFiltersHandler,
-
     TypeSolutionCreateHandler,
     TypeSolutionGetAllHandler,
-
     TypeObjectCreateHandler,
     TypeObjectGetAllHandler,
-
     ArticleCreateHandler,
     ArticleGetAllHandler,
     ArticleGetHandler,
     ImageGetHandler,
+    ForwardingFeedbackHandler,
 )
 
 from .stubs import (
     provide_sqlalchemy_session_stub,
     provide_cloud_service_stub,
     provide_image_editor_stub,
+    provide_email_sender_stub,
 )
 
 
@@ -111,21 +116,23 @@ def provide_product_get_by_filters_handler(
 
 
 def provide_type_solution_create_handler(
-    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(
+    type_solution_service: TypeSolutionService = Depends(),
+    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(  # noqa
         get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
     ),
     commiter: sqlalchemy_gateway.CommiterImpl = Depends(
         get_sqlalchemy_gateway(sqlalchemy_gateway.CommiterImpl)
     ),
-) -> TypeObjectCreateHandler:
-    return TypeObjectCreateHandler(
+) -> TypeSolutionCreateHandler:
+    return TypeSolutionCreateHandler(
+        type_solution_service=type_solution_service,
         type_solution_gateway=type_solution_gateway,
         commiter=commiter,
     )
 
 
 def provide_type_solution_get_all_handler(
-    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(
+    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(  # noqa
         get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
     ),
 ) -> TypeSolutionGetAllHandler:
@@ -135,6 +142,7 @@ def provide_type_solution_get_all_handler(
 
 
 def provide_type_object_create_handler(
+    type_object_service: TypeObjectService = Depends(),
     type_object_gateway: sqlalchemy_gateway.TypeObjectGatewayImpl = Depends(
         get_sqlalchemy_gateway(sqlalchemy_gateway.TypeObjectGatewayImpl)
     ),
@@ -143,6 +151,7 @@ def provide_type_object_create_handler(
     ),
 ) -> TypeObjectCreateHandler:
     return TypeObjectCreateHandler(
+        type_object_service=type_object_service,
         type_object_gateway=type_object_gateway,
         commiter=commiter,
     )
@@ -211,3 +220,9 @@ def provide_image_get_handler(
     return ImageGetHandler(
         image_cloud_gateway=image_cloud_gateway,
     )
+
+
+def provide_forwarding_feedback_handler(
+    email_sender: EmailSenderImpl = Depends(provide_email_sender_stub),
+) -> ForwardingFeedbackHandler:
+    return ForwardingFeedbackHandler(email_sender=email_sender)

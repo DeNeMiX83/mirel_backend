@@ -21,9 +21,7 @@ class TypeSolutionCreateHandler(Hаndler[TypeSolutionCreate, None]):
 
     async def execute(self, data: TypeSolutionCreate) -> None:
         for name in data.names:
-            type_solution = self._type_solution_service.create(
-                name=name
-            )
+            type_solution = self._type_solution_service.create(name=name)
             try:
                 await self._type_solution_gateway.create(type_solution)
             except GatewayException as e:

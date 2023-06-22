@@ -21,9 +21,7 @@ class TypeObjectCreateHandler(Hаndler[TypeObjectCreate, None]):
 
     async def execute(self, data: TypeObjectCreate) -> None:
         for name in data.names:
-            type_object = self._type_object_service.create(
-                name=name
-            )
+            type_object = self._type_object_service.create(name=name)
             try:
                 await self._type_object_gateway.create(type_object)
             except GatewayException as e:

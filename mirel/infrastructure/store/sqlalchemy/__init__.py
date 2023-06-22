@@ -1,1 +1,1 @@
-from .connect import create_session_factory # noqa
+from .connect import create_session_factory  # noqa
