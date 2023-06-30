@@ -2,7 +2,7 @@ from mirel.core.handlers.base import Hаndler
 from mirel.core.exceptions import GatewayException, TypeSolutionExistException
 from mirel.core.protocols import (
     Commiter,
-    TypeSolutionGateway,
+    # TypeSolutionGateway,
 )
 from mirel.core.dto import TypeSolutionCreate
 from mirel.core.services import TypeSolutionService
@@ -24,6 +24,6 @@ class TypeSolutionCreateHandler(Hаndler[TypeSolutionCreate, None]):
             type_solution = self._type_solution_service.create(name=name)
             try:
                 await self._type_solution_gateway.create(type_solution)
-            except GatewayException as e:
-                raise TypeSolutionExistException(str(e))
+            except GatewayException:
+                ...
         await self._commiter.commit()

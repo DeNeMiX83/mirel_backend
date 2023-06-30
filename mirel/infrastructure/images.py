@@ -11,7 +11,6 @@ class ImageEditorImpl(ImageEditor):
     async def optimize(self, path_to_image: str) -> str:
         image = Image.open(path_to_image)
         filename = basename(path_to_image)
-        print(filename)
         filename, old_ext = filename.split(".")
 
         if image.info:
@@ -24,8 +23,6 @@ class ImageEditorImpl(ImageEditor):
 
         jpeg_image.save(path_to_new_image)
         if old_ext != "jpg":
-            print(path_to_new_image)
-            print(old_ext)
             remove(path_to_image)
 
         return path_to_new_image
