@@ -25,6 +25,10 @@ def provide_product_create_handler_stub():
     ...
 
 
+def provide_product_add_image_handler_stub():
+    ...
+
+
 def provide_product_get_all_handler_stub():
     ...
 

@@ -1,5 +1,9 @@
 from typing import Protocol, Optional, List
-from .dto import ProductGetByFilters, ProductReturn, ForwardingFeedbackData
+from .dto import (
+    ProductGetByFilters,
+    ProductReturn,
+    ForwardingFeedbackData,
+)
 from .entities import (
     Product,
     ProductId,
@@ -7,6 +11,7 @@ from .entities import (
     ArticleId,
     TypeSolution,
     TypeObject,
+    Company,
 )
 
 
@@ -23,6 +28,11 @@ class ProductGateway(Protocol):
         raise NotImplementedError
 
     async def create(self, data: Product) -> ProductReturn:
+        raise NotImplementedError
+
+    async def add_image(
+        self, product_id: ProductId, link_to_image: str
+    ) -> None:
         raise NotImplementedError
 
     async def update(self, data: Product):
@@ -47,6 +57,9 @@ class TypeSolutionGateway(Protocol):
     async def create(self, data: TypeSolution):
         raise NotImplementedError
 
+    async def get_by_name(self, name: str) -> Optional[TypeSolution]:
+        raise NotImplementedError
+
     async def get_all(self) -> List[TypeSolution]:
         raise NotImplementedError
 
@@ -55,7 +68,21 @@ class TypeObjectGateway(Protocol):
     async def create(self, data: TypeObject):
         raise NotImplementedError
 
+    async def get_by_name(self, name: str) -> Optional[TypeObject]:
+        raise NotImplementedError
+
     async def get_all(self) -> List[TypeObject]:
+        raise NotImplementedError
+
+
+class CompanyGateway(Protocol):
+    async def create(self, data: Company):
+        raise NotImplementedError
+
+    async def get_by_name(self, name: str) -> Optional[Company]:
+        raise NotImplementedError
+
+    async def get_all(self) -> List[Company]:
         raise NotImplementedError
 
 

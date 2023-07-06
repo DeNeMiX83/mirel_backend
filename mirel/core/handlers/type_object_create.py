@@ -1,8 +1,8 @@
 from mirel.core.handlers.base import Hаndler
-from mirel.core.exceptions import GatewayException, TypeObjectExistException
+from mirel.core.exceptions import GatewayException
 from mirel.core.protocols import (
     Commiter,
-    # TypeObjectGateway,
+    TypeObjectGateway,
 )
 from mirel.core.dto import TypeObjectCreate
 from mirel.core.services import TypeObjectService

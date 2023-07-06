@@ -5,18 +5,24 @@ from mirel.core.entities import (
     ArticleId,
     TypeSolutionId,
     TypeObjectId,
+    CompanyId,
 )
 
 
 class ProductCreate(BaseModel):
     title: str
-    company: str
-    type_solution_id: TypeSolutionId
-    type_object_id: TypeObjectId
+    company_names: List[str]
+    type_solution_names: List[str]
+    type_object_names: List[str]
     year_implementation: int
     preview_description: str
-    description: str
+    description: List[str]
     path_to_preview_image: str
+    path_to_image: str
+
+
+class ProductAddImage(BaseModel):
+    product_id: ProductId
     path_to_image: str
 
 
@@ -30,17 +36,22 @@ class TypeObjectReturn(BaseModel):
     name: str
 
 
+class CompanyReturn(BaseModel):
+    id: CompanyId
+    name: str
+
+
 class ProductReturn(BaseModel):
     id: int
     title: str
-    company: str
-    type_solution: TypeSolutionReturn
-    type_object: TypeObjectReturn
+    companies: List[CompanyReturn]
+    type_solutions: List[TypeSolutionReturn]
+    type_objects: List[TypeObjectReturn]
     year_implementation: int
     preview_description: str
-    description: str
+    description: List[str]
     link_to_preview_image: str
-    link_to_image: str
+    links_to_images: List[str]
 
 
 class ProductGet(BaseModel):

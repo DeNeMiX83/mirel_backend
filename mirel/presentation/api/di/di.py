@@ -11,6 +11,7 @@ from mirel.presentation.api.di.stubs import (
     provide_cloud_service_stub,
     provide_settings_stub,
     provide_product_create_handler_stub,
+    provide_product_add_image_handler_stub,
     provide_product_get_all_handler_stub,
     provide_product_get_handler_stub,
     provide_product_get_by_filters_handler_stub,
@@ -28,6 +29,7 @@ from mirel.presentation.api.di.stubs import (
 )
 from mirel.presentation.api.di.provides import (
     provide_product_create_handler,
+    provide_product_add_image_handler,
     provide_product_get_all_handler,
     provide_product_get_handler,
     provide_product_get_by_filters_handler,
@@ -60,6 +62,7 @@ def setup_di(app: FastAPI, settings: Settings):
     )
     handlers = {
         provide_product_create_handler_stub: provide_product_create_handler,
+        provide_product_add_image_handler_stub: provide_product_add_image_handler,  # noqa
         provide_product_get_all_handler_stub: provide_product_get_all_handler,
         provide_product_get_handler_stub: provide_product_get_handler,
         provide_product_get_by_filters_handler_stub: provide_product_get_by_filters_handler,  # noqa

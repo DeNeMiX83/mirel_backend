@@ -1,9 +1,11 @@
 from typing import List, Sequence, Union, Tuple
-from sqlalchemy import select, Row
-from sqlalchemy.orm import joinedload
+from sqlalchemy import select, Row, insert
 from .base import Gateway
 from mirel.infrastructure.store.sqlalchemy.models import (
     Product as ProductModel,
+    ProductLinkToImage as ProductLinkToImageModel,
+    ProductDescription as ProductDescriptionModel,
+    link_to_image_association_table,
 )
 from mirel.core.protocols import ProductGateway
 from mirel.core.dto import (
@@ -11,51 +13,64 @@ from mirel.core.dto import (
     TypeSolutionReturn,
     TypeObjectReturn,
     ProductGetByFilters,
+    CompanyReturn,
 )
 from mirel.core.entities import Product, ProductId
 
 
 class ProductGatewayImpl(Gateway, ProductGateway):
     async def create(self, product: Product):
+        image = ProductLinkToImageModel(link=product.links_to_images[0])
+        self._session.add(image)
         self._session.add(product)
+        await self._try_exc_flush()
+        stmt = insert(link_to_image_association_table).values(
+            link_to_image_id=image.id, product_id=product.id
+        )
+        await self._session.execute(stmt)
+        for description_line_text in product.description:
+            description_line = ProductDescriptionModel(
+                product_id=product.id, line=description_line_text
+            )
+            self._session.add(description_line)
         await self._try_exc_flush()
         return await self.get(product.id)  # type: ignore
 
-    async def get(self, id: ProductId):
-        stmt = (
-            select(ProductModel)
-            .where(Product.id == id)  # type: ignore
-            .options(
-                joinedload(ProductModel.type_solution),
-                joinedload(ProductModel.type_object),
-            )
+    async def add_image(
+        self, product_id: ProductId, link_to_image: str
+    ) -> None:
+        image = ProductLinkToImageModel(link=link_to_image)
+        self._session.add(image)
+        stmt = insert(link_to_image_association_table).values(
+            link_to_image_id=image.id, product_id=product_id
         )
+        await self._session.execute(stmt)
+        await self._try_exc_flush()
+
+    async def get(self, id: ProductId):
+        stmt = select(ProductModel).where(Product.id == id)  # type: ignore
         result = await self._session.execute(stmt)
         product = result.scalars().first()
         return self._product_to_dto(product)
 
     async def get_all(self) -> List[ProductReturn]:
-        stmt = select(ProductModel).options(
-            joinedload(ProductModel.type_solution),
-            joinedload(ProductModel.type_object),
-        )
+        stmt = select(ProductModel)
         result = await self._session.execute(stmt)
-        return self._get_products_from_data(result.fetchall())
+        return self._get_products_from_data(result.unique().fetchall())
 
     async def get_by_filters(
         self, data: ProductGetByFilters
     ) -> List[ProductReturn]:
         stmt = select(ProductModel)
         if data.company is not None:
-            stmt = stmt.where(ProductModel.company == data.company)
+            stmt = stmt.where(
+                data.company
+                in [company.name for company in ProductModel.companies]
+            )
         if data.year_implementation is not None:
             stmt = stmt.where(
-                ProductModel.year_implementation == data.year_implementation
+                data.year_implementation == ProductModel.year_implementation
             )
-        stmt = stmt.options(
-            joinedload(ProductModel.type_solution),
-            joinedload(ProductModel.type_object),
-        )
         result = await self._session.execute(stmt)
 
         pre_products = result.fetchall()
@@ -63,11 +78,17 @@ class ProductGatewayImpl(Gateway, ProductGateway):
         for product in pre_products:
             product_data = product[0]
             if data.type_solution is not None:
-                if product_data.type_solution.name == data.type_solution:
+                if data.type_solution in [
+                    type_solution.name
+                    for type_solution in product_data.type_solutions
+                ]:
                     products.append(product)
                 continue
             if data.type_object is not None:
-                if product_data.type_object.name == data.type_object:
+                if data.type_object in [
+                    type_object.name
+                    for type_object in product_data.type_objects
+                ]:
                     products.append(product)
                 continue
             products.append(product)
@@ -91,18 +112,35 @@ class ProductGatewayImpl(Gateway, ProductGateway):
         return ProductReturn(
             id=product.id,
             title=product.title,
-            company=product.company,
-            type_solution=TypeSolutionReturn(
-                id=product.type_solution.id,
-                name=product.type_solution.name,
-            ),
-            type_object=TypeObjectReturn(
-                id=product.type_object.id,
-                name=product.type_object.name,
-            ),
+            companies=[
+                CompanyReturn(
+                    id=company.id,
+                    name=company.name,
+                )
+                for company in product.companies
+            ],
+            type_solutions=[
+                TypeSolutionReturn(
+                    id=type_solution.id,
+                    name=type_solution.name,
+                )
+                for type_solution in product.type_solutions
+            ],
+            type_objects=[
+                TypeObjectReturn(
+                    id=type_object.id,
+                    name=type_object.name,
+                )
+                for type_object in product.type_objects
+            ],
             year_implementation=product.year_implementation,
             preview_description=product.preview_description,
-            description=product.description,
+            description=[
+                description_line.line
+                for description_line in product.description
+            ],
             link_to_preview_image=product.link_to_preview_image,
-            link_to_image=product.link_to_image,
+            links_to_images=[
+                link_to_image.link for link_to_image in product.links_to_images
+            ],
         )

@@ -16,6 +16,7 @@ from mirel.core.entities import ProductId
 from mirel.core.exceptions import UnsupportedImageFormat
 from mirel.core.dto import (
     ProductCreate as ProductCreateForHandler,
+    ProductAddImage as ProductAddImageForHandler,
     ProductGetAll as ProductGetAllForHandler,
     ProductGet as ProductGetForHandler,
     ProductGetByFilters as ProductGetByFiltersForHandler,
@@ -23,6 +24,7 @@ from mirel.core.dto import (
 )
 from mirel.core.handlers import (
     ProductCreateHandler,
+    ProductAddImageHandler,
     ProductGetAllHandler,
     ProductGetHandler,
     ProductGetByFiltersHandler,
@@ -30,13 +32,18 @@ from mirel.core.handlers import (
 from mirel.presentation.api.di.stubs import (
     provide_settings_stub,
     provide_product_create_handler_stub,
+    provide_product_add_image_handler_stub,
     provide_product_get_handler_stub,
     provide_product_get_all_handler_stub,
     provide_product_get_by_filters_handler_stub,
 )
 from .field_templates import get_pagination_fields
 from .work_with_files import save_file
-from .dto import PaginationResponse, ProductCreate, ProductGetByFilters
+from .dto import (
+    PaginationResponse,
+    ProductCreate,
+    ProductGetByFilters,
+)
 
 router = APIRouter()
 
@@ -78,9 +85,9 @@ async def create_product(
         product_return = await handler.execute(
             ProductCreateForHandler(
                 title=product.title,
-                company=product.company,
-                type_solution_id=product.type_solution_id,
-                type_object_id=product.type_object_id,
+                company_names=product.company_names,
+                type_solution_names=product.type_solution_names,
+                type_object_names=product.type_object_names,
                 year_implementation=product.year_implementation,
                 preview_description=product.preview_description,
                 description=product.description,
@@ -96,6 +103,40 @@ async def create_product(
             + " Допустимые форматы: png, jpg, jpeg",
         )
     return product_return
+
+
+@router.post(
+    path="/{product_id:str}/image",
+    status_code=status.HTTP_201_CREATED,
+    response_model=None,
+)
+async def product_add_image(
+    response: Response,
+    product_id: ProductId,
+    image: UploadFile = File(..., description="Image"),
+    handler: ProductAddImageHandler = Depends(
+        provide_product_add_image_handler_stub
+    ),
+    settings: Settings = Depends(provide_settings_stub),
+):
+    path_to_image = await save_file(
+        image, settings.path_to_folder_for_save_image, "product"
+    )
+    try:
+        await handler.execute(
+            ProductAddImageForHandler(
+                product_id=product_id,
+                path_to_image=path_to_image,
+            )
+        )
+    except UnsupportedImageFormat:
+        response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Неподдерживаемый формат файла."
+            + " Допустимые форматы: png, jpg, jpeg",
+        )
+    return "ok"
 
 
 @router.get(

@@ -16,6 +16,7 @@ from mirel.core.services import (
 )
 from mirel.core.handlers import (
     ProductCreateHandler,
+    ProductAddImageHandler,
     ProductGetAllHandler,
     ProductGetHandler,
     ProductGetByFiltersHandler,
@@ -68,6 +69,15 @@ def provide_product_create_handler(
     product_gateway: sqlalchemy_gateway.ProductGatewayImpl = Depends(
         get_sqlalchemy_gateway(sqlalchemy_gateway.ProductGatewayImpl)
     ),
+    type_object_gateway: sqlalchemy_gateway.TypeObjectGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeObjectGatewayImpl)
+    ),
+    type_solution_gateway: sqlalchemy_gateway.TypeSolutionGatewayImpl = Depends(  # noqa
+        get_sqlalchemy_gateway(sqlalchemy_gateway.TypeSolutionGatewayImpl)
+    ),
+    company_gateway: sqlalchemy_gateway.CompanyGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.CompanyGatewayImpl)
+    ),
     commiter: sqlalchemy_gateway.CommiterImpl = Depends(
         get_sqlalchemy_gateway(sqlalchemy_gateway.CommiterImpl)
     ),
@@ -78,6 +88,29 @@ def provide_product_create_handler(
 ) -> ProductCreateHandler:
     return ProductCreateHandler(
         product_service=product_service,
+        product_gateway=product_gateway,
+        type_object_gateway=type_object_gateway,
+        type_solution_gateway=type_solution_gateway,
+        company_gateway=company_gateway,
+        commiter=commiter,
+        product_cloud_gateway=product_cloud_gateway,
+        image_editor=image_editor,
+    )
+
+
+def provide_product_add_image_handler(
+    product_gateway: sqlalchemy_gateway.ProductGatewayImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.ProductGatewayImpl)
+    ),
+    commiter: sqlalchemy_gateway.CommiterImpl = Depends(
+        get_sqlalchemy_gateway(sqlalchemy_gateway.CommiterImpl)
+    ),
+    product_cloud_gateway: cloud_gateway.ProductCloudGatewayImpl = Depends(
+        get_cloud_gateway(cloud_gateway.ProductCloudGatewayImpl)
+    ),
+    image_editor: ImageEditorImpl = Depends(provide_image_editor_stub),
+) -> ProductAddImageHandler:
+    return ProductAddImageHandler(
         product_gateway=product_gateway,
         commiter=commiter,
         product_cloud_gateway=product_cloud_gateway,

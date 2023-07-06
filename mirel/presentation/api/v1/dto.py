@@ -8,23 +8,30 @@ from mirel.core.dto import (
 
 class ProductCreate(BaseModel):
     title: str
-    company: str
-    type_solution_id: int
-    type_object_id: int
+    company_names: List[str]
+    type_solution_names: List[str]
+    type_object_names: List[str]
     year_implementation: int
     preview_description: str
-    description: str
+    description: List[str]
 
     class Config:
         schema_extra = {
             "example": {
                 "title": "Пример товара",
-                "company": "Примерная компания",
-                "type_solution_id": 1,
-                "type_object_id": 1,
+                "company_names": [
+                    "Примерная компания 1",
+                    "Примерная компания 2",
+                ],
+                "type_solution_names": ["Шинопровод", "Умный дом"],
+                "type_object_names": ["Пример", "Гостиницы"],
                 "year_implementation": 2022,
                 "preview_description": "Примерное описание для предпросмотра",
-                "description": "Полное описание товара",
+                "description": [
+                    "Полное описание товара",
+                    "Пункт 1",
+                    "Пункт 2",
+                ],
             }
         }
         # exclude = {"created_date"}

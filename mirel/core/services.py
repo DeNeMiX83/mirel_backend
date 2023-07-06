@@ -1,3 +1,4 @@
+from typing import List
 from mirel.core.dto import ProductCreate, ArticleCreate
 from mirel.core.entities import (
     Product as Product,
@@ -13,18 +14,21 @@ class ProductService:
         data: ProductCreate,
         link_to_preview_image: str,
         link_to_image: str,
+        companies: list,
+        type_soluions: List,
+        type_objects: List,
     ) -> Product:
         return Product(
             id=None,
             title=data.title,
-            company=data.company,
-            type_solution_id=data.type_solution_id,
-            type_object_id=data.type_object_id,
+            companies=companies,
+            type_solutions=type_soluions,
+            type_objects=type_objects,
             year_implementation=data.year_implementation,
             preview_description=data.preview_description,
             description=data.description,
             link_to_preview_image=link_to_preview_image,
-            link_to_image=link_to_image,
+            links_to_images=[link_to_image],
         )
 
 
