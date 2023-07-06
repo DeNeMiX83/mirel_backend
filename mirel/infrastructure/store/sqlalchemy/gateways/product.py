@@ -62,21 +62,20 @@ class ProductGatewayImpl(Gateway, ProductGateway):
         self, data: ProductGetByFilters
     ) -> List[ProductReturn]:
         stmt = select(ProductModel)
-        if data.company is not None:
-            stmt = stmt.where(
-                data.company
-                in [company.name for company in ProductModel.companies]
-            )
         if data.year_implementation is not None:
             stmt = stmt.where(
                 data.year_implementation == ProductModel.year_implementation
             )
         result = await self._session.execute(stmt)
-
-        pre_products = result.fetchall()
+        pre_products = result.unique().fetchall()
         products = list()
         for product in pre_products:
             product_data = product[0]
+            if data.company is not None:
+                if data.company in [
+                    company.name for company in product_data.companies
+                ]:
+                    products.append(product)
             if data.type_solution is not None:
                 if data.type_solution in [
                     type_solution.name
